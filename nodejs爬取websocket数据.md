@@ -36,7 +36,14 @@ WebSocket使得客户端和服务器之间的数据交换变得更加简单，�
 * 思考，我们有办法利用puppeteer只监听websocket的请求吗？
 ## 编码实现
 
-```nodejs
+代码环境依赖nodejs, 安装puppeteer模块
+```bash
+npm install puppeteer typescript @types/puppeteer
+```
+
+主函数
+
+```javascript
 const puppeteer = require('puppeteer');
 
 function parse(data) {
