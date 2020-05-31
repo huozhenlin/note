@@ -1,6 +1,12 @@
+"""
+des 加密算法
+优点：速度快
+缺点；2003年已被破解
+"""
+
 from Crypto.Cipher import DES
 
-# str不是8的倍数那就补足为16的倍数
+# str不是8的倍数那就补足为8的倍数
 def add_to_8(value):
     while len(value) % 8 != 0:
         value += '\0'
