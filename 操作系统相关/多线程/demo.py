@@ -2,6 +2,14 @@ import threading
 
 
 class Account():
+    """
+    线程的生命周期
+    创建->就绪->运行->等待/阻塞->死亡
+    new关键字创建线程，
+    run关键字时线程进入就绪状态，具体执行由cpu分配
+    使用wait/join会让当前线程或其他进程进入阻塞状态
+    任务执行完毕，线程进入销毁死亡状态
+    """
 
     def __init__(self, account_no, balance):
         self.account_no = account_no
