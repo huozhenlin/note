@@ -72,6 +72,12 @@ npm config set registry https://registry.npm.taobao.org
 npm --registry https://registry.npm.taobao.org install express
 ```  
 
+## 方式二  
+```bash
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+cnpm i puppeteer
+```
+
 ## 其他问题  
 在mac上安装完chromium后能立即使用，在ubuntu上可能存在这些问题  
 1. 共享资源库找不到  [详细教程](https://askubuntu.com/questions/1091101/error-libgtk-3-so-0-not-installed-even-though-its-in-usr-lib-x86-64-linux-gnu)  
@@ -81,6 +87,9 @@ sudo ldconfig
 sudo dpkg --add-architecture i386
 sudo apt update
 sudo apt install libgtk-3-0:i386
+sudo apt-get install libXss* -y # 若缺少可安装
+sudo apt-get install libasound2 # 若缺少可安装
+
 ```  
 
 2. 仅有终端操作的ubuntu，启动chromeium报错  
