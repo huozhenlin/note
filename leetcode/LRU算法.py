@@ -26,6 +26,7 @@ class LRUCacheDemo():
         print("写入新数据完成")
 
     def get(self, key):
+        # 时间复杂度 O(1)
         if key not in self.queue:
             data = LRUCacheDemo.queue2.get(key)
             self.put(key, data)

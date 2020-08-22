@@ -13,3 +13,23 @@ def quick_sort(list):
     return final
 
 print(quick_sort([1,5,2,7,0,5]))
+
+
+
+
+"""
+0
+1
+5 2 7 5
+
+2 
+5
+7 5
+
+
+
+57
+
+
+0 1 2 5 5 7vbbvbbbbb666b6b444444vgfgggggggggffggbv 
+"""

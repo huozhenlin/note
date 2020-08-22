@@ -7,7 +7,9 @@ class Solution:
             if target - nums[i] not in dict:
                 dict[nums[i]] = i
             else:
-                return [dict[target - nums[i]], i]
+                result = [dict[target - nums[i]], i]
+                print(result)
+                return result
 
 
 Solution().twoSUM([1, 3, 4, 6, 7], 5)
