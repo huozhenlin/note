@@ -2,15 +2,18 @@
 import frida, sys
 
 jsCode = """
+    
+Java.perform(function () {
+
     function showStacks() {
         Java.perform(function () {
             send(Java.use("android.util.Log").getStackTraceString(Java.use("java.lang.Exception").$new()));
         });
     }
-(function () {
+
     var base64EncodeChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
     base64DecodeChars = new Array((-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), 62, (-1), (-1), (-1), 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, (-1), (-1), (-1), (-1), (-1), (-1), (-1), 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, (-1), (-1), (-1), (-1), (-1), (-1), 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, (-1), (-1), (-1), (-1), (-1));
-    this.stringToBase64 = function (e) {
+    var stringToBase64 = function (e) {
         var r,a,c,h,o,t;
         for (c = e.length, a = 0, r = ''; a < c; ) {
             if (h = 255 & e.charCodeAt(a++), a == c) {
@@ -34,7 +37,7 @@ jsCode = """
         }
         return r
     }
-    this.base64ToString = function (e) {
+    var base64ToString = function (e) {
         var r,a,c,h,o,t,d;
         for (t = e.length, o = 0, d = ''; o < t; ) {
             do
@@ -67,8 +70,8 @@ jsCode = """
         }
         return d
     }
-    
-    this.hexToBytes = function (str) {
+
+    var hexToBytes = function (str) {
         var pos = 0;
         var len = str.length;
         if (len % 2 != 0) {
@@ -84,7 +87,8 @@ jsCode = """
         }
         return hexA;
     }
-    this.bytesToHex = function (arr) {
+    
+    var bytesToHex = function (arr) {
         var str = '';
         var k,j;
         for(var i = 0; i<arr.length; i++) {
@@ -100,7 +104,8 @@ jsCode = """
         }
         return str;
     }
-    this.stringToHex = function (str) {
+    
+    var stringToHex = function (str) {
         var val = "";
         for (var i = 0; i < str.length; i++) {
             if (val == "")
@@ -110,7 +115,8 @@ jsCode = """
         }
         return val
     }
-    this.stringToBytes = function (str) {  
+    
+    var stringToBytes = function (str) {  
         var ch, st, re = []; 
         for (var i = 0; i < str.length; i++ ) { 
             ch = str.charCodeAt(i);  
@@ -124,16 +130,13 @@ jsCode = """
         }  
         return re;  
     } 
-    //将byte[]转成String的方法
-    this.bytesToString = function (arr) {  
-        var str = '';
-        arr = new Uint8Array(arr);
-        for(i in arr){
-            str += String.fromCharCode(arr[i]);
-        }
-        return str;
+    
+    var bytesToString = function bytesToString (arr) {  
+        var JString = Java.use("java.lang.String");
+        return JString.$new(arr)
     }
-    this.bytesToBase64=function(e){
+    
+    var bytesToBase64=function(e){
         var r,a,c,h,o,t;
         for (c = e.length, a = 0, r = ''; a < c; ) {
             if (h = 255 & e[a++], a == c) {
@@ -157,7 +160,8 @@ jsCode = """
         }
         return r
     }
-    this.base64ToBytes=function(e){
+    
+    var base64ToBytes=function(e){
         var r,a,c,h,o,t,d;
         for (t = e.length, o = 0, d = []; o < t; ) {
             do
@@ -190,12 +194,13 @@ jsCode = """
         }
         return d
     }
-})();
-//stringToBase64 stringToHex stringToBytes
-//base64ToString base64ToHex base64ToBytes
-//               hexToBase64  hexToBytes    
-// bytesToBase64 bytesToHex bytesToString
-Java.perform(function () {
+    
+    //stringToBase64 stringToHex stringToBytes
+    //base64ToString base64ToHex base64ToBytes
+    //               hexToBase64  hexToBytes    
+    // bytesToBase64 bytesToHex bytesToString
+
+
     var secretKeySpec = Java.use('javax.crypto.spec.SecretKeySpec');
     secretKeySpec.$init.overload('[B','java.lang.String').implementation = function (a,b) {
         showStacks();
@@ -242,7 +247,8 @@ Java.perform(function () {
         send("doFinal结果:" + bytesToBase64(result));
         return result;
     }
-        var md = Java.use('java.security.MessageDigest');
+    
+    var md = Java.use('java.security.MessageDigest');
     md.getInstance.overload('java.lang.String','java.lang.String').implementation = function (a,b) {
         showStacks();
         send("======================================");
@@ -353,18 +359,18 @@ Java.perform(function () {
 });
 """;
 
-
 print(sys.argv[1])
 fw = open(sys.argv[1], 'w+', encoding='utf-8')
 
 
 def message(message, data):
     if message["type"] == 'send':
-        print(u"[*] {0}".format(message['payload']))
+        # print(u"[*] {0}".format(message['payload']))
         fw.write(u"[*] {0}\n".format(message['payload']))
         fw.flush()
     else:
-        print(message)
+        # print(message)
+        pass
 
 
 process = frida.get_usb_device().attach(sys.argv[1])
